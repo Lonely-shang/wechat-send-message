@@ -1,1 +1,8 @@
+server:
+  port: 8080
 
+wx:
+  appID: 测试号的appID
+  appsecret: 测试号的appsecret
+  touser: 要发送人的微信
+  template_id: 消息模板id
