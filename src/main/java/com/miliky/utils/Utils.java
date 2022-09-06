@@ -83,8 +83,9 @@ public class Utils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0)
+        if (w < 0) {
             w = 0;
+        }
         return weekDays[w];
     }
 }

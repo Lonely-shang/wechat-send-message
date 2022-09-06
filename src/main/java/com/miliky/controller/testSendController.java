@@ -1,9 +1,11 @@
 package com.miliky.controller;
 
-import org.springframework.stereotype.Controller;
+import com.miliky.service.SendMessage;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  *
@@ -17,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/a")
 public class testSendController {
 
+    @Resource
+    private SendMessage sendMessage;
+
     @GetMapping("/send")
-    public String send () {
-        return "aaaa";
+    public void send () {
+        sendMessage.sendMessageByTemplate();
     }
 }
