@@ -1,6 +1,9 @@
 package com.miliky.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.miliky.entry.Limited;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,8 +12,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -87,5 +92,44 @@ public class Utils {
             w = 0;
         }
         return weekDays[w];
+    }
+
+    // http://yw.jtgl.beijing.gov.cn/jgjxx/services/getRuleWithWeek
+
+    public static List<Limited> getForbiddenNumber () {
+        try {
+            String forbiddenNumber = "";
+            URLConnection connectionData;
+            BufferedReader br;// 读取data数据流
+            StringBuilder sb = null;
+            URL url = new URL("http://yw.jtgl.beijing.gov.cn/jgjxx/services/getRuleWithWeek");
+            connectionData = url.openConnection();
+            connectionData.setConnectTimeout(1000);
+            try {
+                br = new BufferedReader(new InputStreamReader(connectionData.getInputStream(), "UTF-8"));
+                sb = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            assert sb != null;
+            forbiddenNumber = sb.toString();
+            JSONObject jsonData = JSONObject.parseObject(forbiddenNumber);
+            JSONArray data = jsonData.getJSONArray("result");
+            ArrayList<Limited> limiteds = new ArrayList<>();
+            for (Object datum : data) {
+                Limited limited = JSONObject.toJavaObject(JSONObject.parseObject(JSONObject.toJSONString(datum)), Limited.class);
+                limiteds.add(limited);
+            }
+
+            return limiteds;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

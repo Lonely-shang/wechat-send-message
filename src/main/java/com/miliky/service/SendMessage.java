@@ -12,8 +12,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.annotation.Resource;
 
+import com.miliky.entry.Limited;
 import com.miliky.utils.HtmlParseUtil;
 import com.miliky.utils.Utils;
 import okhttp3.*;
@@ -47,7 +47,7 @@ public class SendMessage {
         System.out.println("===========加载配置文件============");
         try {
             //留言文件的存放地址
-            ClassPathResource classPathResource = new ClassPathResource("/like.txt");
+            ClassPathResource classPathResource = new ClassPathResource("/static/like.txt");
             //获取文件
             File file = classPathResource.getFile();
             //获取路径
@@ -58,7 +58,6 @@ public class SendMessage {
             InputStream in = this.getClass().getClassLoader().getResourceAsStream(path);
             //获取文件流
             FileInputStream inputStream = new FileInputStream(file);
-//            FileInputStream inputStream = new FileInputStream("/like.txt");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
             String str = null;
@@ -98,7 +97,6 @@ public class SendMessage {
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
-//            MediaType mediaType = MediaType.parse("application/json");
             MediaType mediaType = MediaType.parse("application/json");
             JSONObject requestData = new JSONObject();
             requestData.put("touser", touser);
@@ -107,39 +105,49 @@ public class SendMessage {
             requestData.put("topcolor", "");
             //模板文件中的各个参数
             JSONObject data = new JSONObject();
-            //日期
-            JSONObject date = new JSONObject();
-            date.put("value", Utils.getNowDate() + " " + Utils.getWeekOfDate(new Date()));
-            date.put("color", "#005faf");
-            //天数
-            JSONObject dateNumbers = new JSONObject();
-            String s = Utils.toNowDatNum();
-            dateNumbers.put("value", s);
-            dateNumbers.put("color", "#005faf");
-            //文本
-            JSONObject text = new JSONObject();
-            text.put("value", "♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥\n" + parm.get(this.sendTimeNum));
-            text.put("color", "#f73131");
-
-            JSONObject weather = Utils.getWeather();
-            String tianqiStr = "";
-            if (weather != null) {
-                String high = weather.getString("high");
-                String low = weather.getString("low");
-                String fx = weather.getString("fx");
-                String fl = weather.getString("fl");
-                String type = weather.getString("type");
-                tianqiStr = type + ",最高温度：" + high + ",最低温度：" + low + "," + fx + fl;
-            }
+//            //日期
+//            JSONObject date = new JSONObject();
+//            date.put("value", Utils.getNowDate() + " " + Utils.getWeekOfDate(new Date()));
+//            date.put("color", "#005faf");
+//            //天数
+//            JSONObject dateNumbers = new JSONObject();
+//            String s = Utils.toNowDatNum();
+//            dateNumbers.put("value", s);
+//            dateNumbers.put("color", "#005faf");
+//            //文本
+//            JSONObject text = new JSONObject();
+//            text.put("value", "♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥\n" + parm.get(this.sendTimeNum));
+//            text.put("color", "#f73131");
+//
+//            JSONObject weather = Utils.getWeather();
+//            String tianqiStr = "";
+//            if (weather != null) {
+//                String high = weather.getString("high");
+//                String low = weather.getString("low");
+//                String fx = weather.getString("fx");
+//                String fl = weather.getString("fl");
+//                String type = weather.getString("type");
+//                tianqiStr = type + ",最高温度：" + high + ",最低温度：" + low + "," + fx + fl;
+//            }
             //天气
-            JSONObject tianqi = new JSONObject();
-            tianqi.put("value", tianqiStr);
-            tianqi.put("color", "#ff4d00");
-            data.put("date", date);
+//            JSONObject tianqi = new JSONObject();
+//            tianqi.put("value", tianqiStr);
+//            tianqi.put("color", "#ff4d00");
+//            data.put("date", date);
             //天数
-            data.put("dateNumbers", dateNumbers);
+//            data.put("dateNumbers", dateNumbers);
+//            data.put("text", text);
+//            data.put("tianqi", tianqi);
+
+
+            JSONObject text = new JSONObject();
+            List<Limited> forbiddenNumber = Utils.getForbiddenNumber();
+            String str = "";
+            for (Limited limited : forbiddenNumber) {
+                str += limited.toString();
+            }
+            text.put("value", str);
             data.put("text", text);
-            data.put("tianqi", tianqi);
             requestData.put("data", data);
             RequestBody body = RequestBody.create(mediaType, requestData.toJSONString());
             Request request = new Request.Builder()
