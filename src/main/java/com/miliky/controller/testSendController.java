@@ -29,13 +29,6 @@ public class testSendController {
 
     @GetMapping("/send")
     public void send () {
-//        List<Limited> forbiddenNumber = Utils.getForbiddenNumber();
-//
-//        for (Limited limited : forbiddenNumber) {
-//            System.out.println(limited.toString());
-//        }
-
-
-        sendMessage.sendMessageByTemplate();
+//        sendMessage.sendForbiddenNumberMessageByTemplate("oOyZn6_3prxQQbpR08Vc8cKfnvFE", "kmvjwoiGzSy1knITnBXRuAXGWzyoaGBMLA7m6urJVFo");
     }
 }

@@ -23,8 +23,9 @@ public class SendMessageTask {
     SendMessage sendMessage;
 
 //    @Scheduled(cron="0/5 * *  * * ? ")
-//    @Scheduled(cron = "0 30 7 * * ? *")
-//    private void configureTasks() {
-//        sendMessage.sendMessageByTemplate();
-//    }
+    @Scheduled(cron = "0 30 7 * * ?")
+    private void configureTasks() {
+        sendMessage.sendMessageByTemplate("oOyZn6-ktWyFdUQnG_hMSLp1rLtE", "MS_8tMihef-6XBIS6IFnD4vKQmo1CHIa_uN6_EX3JqA");
+        sendMessage.sendForbiddenNumberMessageByTemplate("oOyZn69j-qeL_FO1YehWd6lkQguY", "kmvjwoiGzSy1knITnBXRuAXGWzyoaGBMLA7m6urJVFo");
+    }
 }
